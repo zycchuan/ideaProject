@@ -71,7 +71,7 @@ public class MaxEms {
 
         x[1] = 1; //已知 第一个 面值  为  1
         cnt = 1;  //因为  已知  第一个面值为  1 所以 现在 种类数  为 1；
-        dfs(); //调用深搜   跑 算法   走你..  123
+        dfs(); //调用深搜   跑 算法   走你..  123456
         System.out.println(max);
         for (int i = 1; i <= knd; i++)
             System.out.print(r[i] + " ");
