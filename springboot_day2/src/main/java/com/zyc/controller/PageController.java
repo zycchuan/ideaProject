@@ -1,6 +1,10 @@
 package com.zyc.controller;
 
+import com.zyc.task.AyncTask;
 import com.zyc.utils.MyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
@@ -15,11 +19,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping("page")
 @PropertySource({"classpath:application.properties"})
 public class PageController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private AyncTask ayncTask;
 
     @Value("${web.file.path}")
     private String realPath;
@@ -27,8 +38,32 @@ public class PageController {
 
     @RequestMapping("index")
     public String index(){
-
+        logger.error("this is error");
+        logger.warn("this is  warn");
+        logger.debug("this  is  debug");
+        logger.info("this is info");
         System.out.println(realPath);
+        return "index";
+    }
+
+    @RequestMapping("ayncTest")
+    public String ayncTest() throws InterruptedException, ExecutionException {
+        long l = System.currentTimeMillis();
+        ayncTask.test1();
+        ayncTask.test2();
+        ayncTask.test3();
+        Future<String> stringFuture = ayncTask.test4();//又返回结果
+        while (true){
+            if (stringFuture.isDone()){
+                String s1 = stringFuture.get();//获取返回结果
+                System.out.println(s1);
+                break;
+            }
+        }
+        long s = System.currentTimeMillis();
+        System.out.println("main："+(s-l));
+        System.out.println(realPath);
+
         return "index";
     }
 
