@@ -74,7 +74,6 @@ public class UserController {
 
     @RequestMapping("text")
     public Object text(){
-
         return person;
     }
 
